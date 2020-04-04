@@ -5,7 +5,7 @@
             <div class="address-list">
                 <div class="address-item" v-for="(item, index) in addressAll" :key="index" @click="goPage(`/user/address/mod?aid=${item.aid}`)">
                     <div class="user-info"><span class="name">{{ item.name }}</span><span class="phone">{{ item.cellphone }}</span></div>
-                    <div class="address-info"><span>{{ item.isdefault ? '[默认]' : '' }}</span>{{item.province + item.address + item.city}}</div>
+                    <div class="address-info"><span>{{ item.isdefault === '1' ? '[默认]' : '' }}</span>{{item.province + item.city + item.area + item.address}}</div>
                     <div class="right-arrow"></div>
                 </div>
             </div>

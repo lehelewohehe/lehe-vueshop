@@ -1,5 +1,5 @@
 import * as type from '../mutation-types'
-import { loginData, safeExitData, getUserInfoData, isSafeLoginData, uploadAvatarData, updateUserInfoData, modPasswordData, getMyFavoriteData, deleteMyFavoriteData, addMyFavoriteData } from '../../../api/user/'
+import { loginData, safeExitData, getUserInfoData, isSafeLoginData, uploadAvatarData, updateUserInfoData, modPasswordData, getMyFavoriteData, deleteMyFavoriteData, addMyFavoriteData, updateCellPhoneData } from '../../../api/user/'
 import Vue from 'vue'
 
 export default {
@@ -170,6 +170,14 @@ export default {
         },
         addMyFavorite(context, payload) {
             addMyFavoriteData(payload.data).then(res => {
+                console.log(res)
+                if (payload.success) {
+                    payload.success(res.data)
+                }
+            })
+        },
+        updateCellPhone(context, payload) {
+            updateCellPhoneData(payload.data).then(res => {
                 console.log(res)
                 if (payload.success) {
                     payload.success(res.data)

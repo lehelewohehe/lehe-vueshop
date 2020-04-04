@@ -14,7 +14,7 @@
                 <div class="details-main">
                     <router-view></router-view>
                 </div>
-            </div>s
+            </div>
         </div>
         <div class="details-footer">
             <div class="details-collection">
@@ -562,6 +562,7 @@ export default {
     width: 100%;
     left: 0px;
     bottom: 0px;
+    line-height: 0.8rem;
 }
 
 .btn-ok .buy-ok {

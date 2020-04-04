@@ -1,5 +1,5 @@
-search<template>
-    <div class="page">
+<template>
+    <div class="page" ref="pageIndex">
         <div :class='{"page-header": true, scroll: isScroll}'>
             <div class="classify-icon" @click="$router.push('/goods/classify')"></div>
             <div class="search" @click="isSearch = true">
@@ -144,6 +144,11 @@ export default {
         }})
         this.getHotwords()
     },
+    mounted() {
+        // addEventListener(this.$refs['pageIndex'], 'touchstart', this.stopTouchMoveEvent)
+        // addEventListener(this.$refs['pageIndex'], 'touchmove', this.stopTouchMoveEvent)
+        // addEventListener(this.$refs['pageIndex'], 'touchend', this.stopTouchMoveEvent)
+    },
     computed: {
         ...mapState({
             navs: state => state.index.navs,
@@ -180,6 +185,9 @@ export default {
         hideSearch(val) {
             this.isSearch = val
             console.log(2222)
+        },
+        stopTouchMoveEvent(e) {
+            e.preventDefault()
         }
     },
     components: {

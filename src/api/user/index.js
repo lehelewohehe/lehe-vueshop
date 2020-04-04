@@ -50,3 +50,8 @@ export function deleteMyFavoriteData({uid, fid}) {
 export function addMyFavoriteData({uid, gid}) {
 	return request(`${conf.baseURL}/goods/fav?uid=${uid}&gid=${gid}&token=${conf.token}`, 'get')
 }
+
+// 修改绑定手机号
+export function updateCellPhoneData(data) {
+	return request(`${conf.baseURL}/user/myinfo/updatecellphone?token=${conf.token}`, 'post', data)
+}

@@ -4,9 +4,7 @@ import router from './router'
 import store from './store'
 import conf from './assets/js/conf/config.js'
 import utils from './assets/js/utils'
-// import FastClick from 'fastclick'
 
-// FastClick.attach(document.body)
 
 Vue.prototype.$config = conf
 Vue.prototype.$utils = utils
