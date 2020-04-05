@@ -11,22 +11,22 @@
                 <div class="order-tags">
                     <div class="order-header">
                         <span>全部订单</span>
-                        <div class="watch-allorder">查看全部订单></div>
+                        <div class="watch-allorder" @click="goPage('/user/order/list?status=all')">查看全部订单></div>
                     </div>
                     <div class="order-main">
-                        <div class="load-pay">
+                        <div class="load-pay" @click="goPage('/user/order/list?status=loadPay')">
                             <ul>
                                 <li></li>
                                 <li>待支付</li>
                             </ul>
                         </div>
-                        <div class="load-getter">
+                        <div class="load-getter" @click="goPage('/user/order/list?status=getter')">
                             <ul>
                                 <li></li>
                                 <li>待收货</li>
                             </ul>
                         </div>
-                        <div class="load-comment">
+                        <div class="load-comment" @click="goPage('/user/order/list?status=review')">
                             <ul>
                                 <li></li>
                                 <li>待评价</li>
@@ -127,6 +127,10 @@ export default {
             loginInfo: state => state.user.loginInfo,
             userInfo: state => state.user.userInfo
         })
+    },
+    beforeDestroy() {
+        removeEventListener(this.$refs['ucenter-main'], 'touchmove', this.stopTouchMoveEvent)
+        this.myScroll.destroy()
     }
 }
 </script>

@@ -6,6 +6,7 @@ import review from './modules/goods/review'
 import search from './modules/search/'
 import user from './modules/user/'
 import address from './modules/address/'
+import order from './modules/order/'
 
 Vue.use(Vuex)
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
   	review,
   	search,
   	user,
-  	address
+  	address,
+  	order
   }
 })

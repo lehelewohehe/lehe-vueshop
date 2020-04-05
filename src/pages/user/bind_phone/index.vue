@@ -141,6 +141,7 @@ export default {
     height: 100%;
     padding-left: 0.2rem;
     box-sizing: border-box;
+    font-size: 0.28rem;
 }
 
 .phone-wrapper .code-wrapper input {

@@ -47,7 +47,7 @@ export default {
                                     })
                                 }
                             })
-                        } else if((parseInt(this.pageInfo.page) === parseInt(this.pageInfo.pagenum))) {
+                        } else if ((parseInt(this.pageInfo.page) === parseInt(this.pageInfo.pagenum))) {
                             this.$parent.myScroll._events.scrollEnd = null
                         }
                     })

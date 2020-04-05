@@ -42,6 +42,9 @@ export default {
             success: () => {
                 this.$nextTick(() => {
                     this.myScroll.refresh()
+                    if (!this.myFavorite.pageinfo) {
+                        return
+                    }
                     this.myScroll.on('scrollEnd', () => {
                         let sub = -Math.abs(this.myScroll.scrollerHeight - this.myScroll.wrapperHeight)
                         console.log(sub, this.myScroll.y === sub, this.myScroll.y, (parseInt(this.myFavorite.pageinfo.page) < parseInt(this.myFavorite.pageinfo.pagenum)))

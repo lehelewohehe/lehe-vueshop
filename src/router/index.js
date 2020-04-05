@@ -121,6 +121,33 @@ const routes = [{
         name: 'user-address-mod',
         meta: { keepAlive: false, title: '修改地址', auth: true },
         component: () => import('../pages/user/address/mod')
+    },
+    {
+        path: '/user/order',
+        name: 'user-order',
+        meta: {keepAlive: false, title: '全部订单', auth: true},
+        component: () => import('../pages/user/order/index'),
+        redirect: '/user/order/list',
+        children: [
+        {
+            path: '/user/order/list',
+            name: 'user-order-list',
+            meta: {keepAlive: false, title: '订单', auth: true},
+            component: () => import('../pages/user/order/list')
+        },
+        {
+            path: '/user/order/details',
+            name: 'user-order-details',
+            meta: {keepAlive: false, title: '详细订单', auth: true},
+            component: () => import('../pages/user/order/details')
+        },
+        {
+            path: '/user/order/add_review',
+            name: 'user-order-add_review',
+            meta: {keepAlive: false, title: '订单评价', auth: true},
+            component: () => import('../pages/user/order/add_review')
+        }
+        ]
     }
 ]
 
