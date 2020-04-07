@@ -68,6 +68,9 @@ export default {
             goodsComment: state => state.review.goodsComment,
             pageInfo: state => state.review.pageInfo
         })
+    },
+    beforeDestroy() {
+        this.$parent.myScroll._events.scrollEnd = null
     }
 }
 </script>

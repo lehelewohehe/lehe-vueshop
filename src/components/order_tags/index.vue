@@ -1,6 +1,6 @@
 <template>
 	<div class="page-ordertags">
-		<div :class="{'tags-item': true, active: item.active}" v-for="(item, index) in list" @click="handleClick(item.status, index)">{{item.name}}</div>
+		<div :class="{'tags-item': true, active: item.active}" v-for="(item, index) in list" @click="handleClick('/user/order/list?status=' + item.status, index)">{{item.name}}</div>
 	</div>
 </template>
 

@@ -50,7 +50,11 @@ export default {
                         }
                     }
                     this.list[index].active = true
-                    this.$router.replace('/user/order/list?status=' + status)
+                    if (status.startsWith('/user/order/list')) {
+                        this.$router.replace(status)
+                    } else {
+                        this.$router.push(status)
+                    }
                 },
                 error: () => {
                     this.$router.push('/login')
@@ -62,7 +66,7 @@ export default {
                 if (this.list[i].status) {
                     this.list[i].active = false
                 }
-                if(this.list[i].status === status) {
+                if (this.list[i].status === status) {
                     this.list[i].active = true
                     document.title = this.list[i].name
                 }

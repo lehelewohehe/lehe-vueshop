@@ -2,12 +2,12 @@
     <div class="order-wrapper" ref="order-wrapper">
         <div class="order-list">
             <template v-if="!isReview">
-                <div class="order-item" v-for="(item, index) in (orderAll.data ? orderAll.data : [])" :key="index">
+                <div class="order-item" v-for="(item, index) in (orderAll.data ? orderAll.data : [])" :key="index" @click="goPage('/user/order/details?ordernum=' + item.ordernum)">
                     <div class="item-header">
                         <div class="order-code">订单编号：{{ item.ordernum }}</div>
                         <div class="order-status">{{ statuArr[item.status] }}</div>
                     </div>
-                    <div class="item-center" v-for="(subItem, subIndex) in (item.goods ? item.goods : [])" :key="subIndex">
+                    <div class="item-center" v-for="(subItem, subIndex) in (item.goods ? item.goods : [])" :key="subIndex" >
                         <div class="order-image"><img :src="subItem.image" alt=""></div>
                         <div class="order-text">
                             <div class="order-title">{{ subItem.title }}</div>
@@ -40,7 +40,7 @@
                 </div>
             </template>
             <template v-if="isReview">
-                <div class="order-item" v-for="(item, index) in (orderReview.data ? orderReview.data : [])" :key="index">
+                <div class="order-item" v-for="(item, index) in (orderReview.data ? orderReview.data : [])" :key="index" @click="goPage('/user/order/details?ordernum=' + item.ordernum)">
                     <div class="item-header">
                         <div class="order-code">订单编号：{{ item.ordernum }}</div>
                         <div class="order-status">{{ statuArr[item.status] }}</div>
@@ -65,7 +65,7 @@
                                     <div class="cancel-btn">
                                         <my-button class="cancel">追加评价</my-button>
                                     </div>
-                                </template> 
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -119,14 +119,28 @@ export default {
         stopTouchMoveEvent(e) {
             e.preventDefault()
         },
-        getStatus(key) {
-            return this.list[key]
+        getIndex(key) {
+            switch(key) {
+                case 'all': return 0
+                break
+                case 'loadPay': return 1
+                break
+                case 'getter': return 2
+                break
+                case 'review': return 3
+                break
+                default: return 0
+            }
+        },
+        goPage(url) {
+            this.$parent.goPage(url, this.getIndex(this.$route.query.status))
         },
         dropDownRefresh(obj, status, fuc) {
             if (!obj.pageinfo) {
                 return
             }
             this.myScroll.on('scrollEnd', () => {
+                console.log(status)
                 let sub = -Math.abs(this.myScroll.scrollerHeight - this.myScroll.wrapperHeight)
                 console.log(sub, this.myScroll.y === sub, this.myScroll.y, (parseInt(obj.pageinfo.page) < parseInt(obj.pageinfo.pagenum)))
                 if (this.myScroll.y === sub && (parseInt(obj.pageinfo.page) < parseInt(obj.pageinfo.pagenum))) {
@@ -151,11 +165,11 @@ export default {
             if (status !== 'review') {
                 this.isReview = false
                 this.getOrderAll({
-                    data: { uid: this.loginInfo.uid, page: 1, status: this.list[status], page: 1 },
+                    data: { uid: this.loginInfo.uid, page: 1, status: this.list[status] },
                     success: () => {
                         this.$nextTick(() => {
                             this.myScroll.refresh()
-                            this.dropDownRefresh(this.orderAll, status, this.getOrderData)
+                            this.dropDownRefresh(this.orderAll, status, this.getOrderAll)
                         })
                     }
                 })
@@ -185,6 +199,7 @@ export default {
         this.myScroll.destroy()
     },
     beforeRouteUpdate(to, from, next) {
+        this.myScroll._events.scrollEnd = null
         this.getOrderData(to.query.status)
         next()
     }
@@ -238,6 +253,10 @@ export default {
 
 .item-center .order-text .order-title {
     width: 90%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 .item-center .order-text .order-num {

@@ -1,29 +1,37 @@
 import * as type from '../mutation-types'
-import { getOrderAllData, getOrderReviewData } from '../../../api/order/'
+import { getOrderAllData, getOrderReviewData, getOrderDetailsData, getCommentItemData } from '../../../api/order/'
 
 export default {
     namespaced: true,
     state: {
         orderAll: {},
-        orderReview: {}
+        orderReview: {},
+        orderDetails: {},
+        commentItem: []
     },
     getters: {
 
     },
     mutations: {
-        [type.SET_ORDERALL](status, payload) {
-            status.orderAll = payload.orderAll
+        [type.SET_ORDERALL](state, payload) {
+            state.orderAll = payload.orderAll
         },
-        [type.APPEND_ORDERALL](status, payload) {
-            status.orderAll.data = status.orderAll.data.concat(payload.orderAll.data)
-            status.orderAll.pageinfo = payload.orderAll.pageinfo
+        [type.APPEND_ORDERALL](state, payload) {
+            state.orderAll.data = state.orderAll.data.concat(payload.orderAll.data)
+            state.orderAll.pageinfo = payload.orderAll.pageinfo
         },
-        [type.SET_ORDERREVIEW](status, payload) {
-            status.orderReview = payload.orderReview
+        [type.SET_ORDERREVIEW](state, payload) {
+            state.orderReview = payload.orderReview
         },
-        [type.APPEND_ORDERREVIEW](status, payload) {
-            status.orderReview.data = status.orderReview.data.concat(payload.orderReview.data)
-            status.orderReview.pageinfo = payload.orderReview.pageinfo
+        [type.APPEND_ORDERREVIEW](state, payload) {
+            state.orderReview.data = state.orderReview.data.concat(payload.orderReview.data)
+            state.orderReview.pageinfo = payload.orderReview.pageinfo
+        },
+        [type.SET_ORDERDETAILS](state, payload) {
+            state.orderDetails = payload.orderDetails
+        },
+        [type.SET_COMMENTITEM](state, payload) {
+            state.commentItem = payload.commentItem
         }
     },
     actions: {
@@ -76,6 +84,25 @@ export default {
                             payload.success()
                         }
                     }
+                }
+            })
+        },
+        getOrderDetails(context, payload) {
+            getOrderDetailsData(payload.data).then(res => {
+                console.log(res)
+                if(res.code === 200) {
+                    context.commit(type.SET_ORDERDETAILS, {orderDetails: res.data})
+                    if(payload.success) {
+                        payload.success()
+                    }
+                }
+            })
+        },
+        getCommentItem(context, payload) {
+            getCommentItemData().then(res => {
+                console.log(res)
+                if(res.code === 200) {
+                    context.commit(type.SET_COMMENTITEM, {commentItem: res.data})
                 }
             })
         }
