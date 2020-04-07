@@ -7,7 +7,7 @@
                         <div class="order-code">订单编号：{{ item.ordernum }}</div>
                         <div class="order-status">{{ statuArr[item.status] }}</div>
                     </div>
-                    <div class="item-center" v-for="(subItem, subIndex) in (item.goods ? item.goods : [])" :key="subIndex" >
+                    <div class="item-center" v-for="(subItem, subIndex) in (item.goods ? item.goods : [])" :key="subIndex">
                         <div class="order-image"><img :src="subItem.image" alt=""></div>
                         <div class="order-text">
                             <div class="order-title">{{ subItem.title }}</div>
@@ -19,10 +19,10 @@
                         <div class="order-btn">
                             <template v-if="item.status === '0'">
                                 <div class="cancel-btn">
-                                    <my-button class="cancel">取消订单</my-button>
+                                    <my-button class="cancel" @click="cancelOneOrder(item.ordernum)">取消订单</my-button>
                                 </div>
                                 <div class="cancel-btn">
-                                    <my-button class="cancel">去付款</my-button>
+                                    <my-button class="cancel" @click="confirmOneGetter(item.ordernum)">去付款</my-button>
                                 </div>
                             </template>
                             <template v-else-if="item.status === '1'">
@@ -58,12 +58,12 @@
                             <div class="order-btn">
                                 <template v-if="subItem.isreview === '0'">
                                     <div class="cancel-btn">
-                                        <my-button class="cancel">评价</my-button>
+                                        <my-button class="cancel" @click="goPage(`/user/order/add_review?ordernum=${item.ordernum}&gid=${subItem.gid}`)">评价</my-button>
                                     </div>
                                 </template>
                                 <template v-else-if="subItem.isreview === '1'">
                                     <div class="cancel-btn">
-                                        <my-button class="cancel">追加评价</my-button>
+                                        <my-button class="cancel" @click="goPage(`/user/order/add_review?ordernum=${item.ordernum}&gid=${subItem.gid}`)">追加评价</my-button>
                                     </div>
                                 </template>
                             </div>
@@ -80,7 +80,11 @@ import { addEventListener, removeEventListener } from '../../../assets/js/utils/
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
 import button from '../../../components/button/index'
+import Toast from '../../../components/toast/'
+import confirm from '../../../components/confirm/index'
 Vue.use(button)
+Vue.use(Toast)
+Vue.use(confirm)
 export default {
     data() {
         return {
@@ -114,23 +118,77 @@ export default {
     methods: {
         ...mapActions({
             getOrderAll: 'order/getOrderAll',
-            getOrderReview: 'order/getOrderReview'
+            getOrderReview: 'order/getOrderReview',
+            cancelOrder: 'order/cancelOrder',
+            confirmGetter: 'order/confirmGetter'
         }),
         stopTouchMoveEvent(e) {
             e.preventDefault()
         },
         getIndex(key) {
-            switch(key) {
-                case 'all': return 0
-                break
-                case 'loadPay': return 1
-                break
-                case 'getter': return 2
-                break
-                case 'review': return 3
-                break
-                default: return 0
+            switch (key) {
+                case 'all':
+                    return 0
+                    break
+                case 'loadPay':
+                    return 1
+                    break
+                case 'getter':
+                    return 2
+                    break
+                case 'review':
+                    return 3
+                    break
+                default:
+                    return 0
             }
+        },
+        cancelOneOrder(ordernum) {
+            setTimeout(() => {
+                this.$confirm('是否删除吗?', [{
+                        text: '取消',
+                        onPress: () => {
+
+                        }
+                    },
+                    {
+                        text: '确定',
+                        onPress: () => {
+                            this.cancelOrder({
+                                data: { uid: this.loginInfo.uid, ordernum: ordernum },
+                                success: (data) => {
+                                    this.$router.go(0)
+                                    this.$toast(data)
+                                }
+                            })
+                        }
+                    }
+                ])
+            }, 0)
+
+        },
+        confirmOneGetter(ordernum) {
+            setTimeout(() => {
+                this.$confirm('是否删除吗?', [{
+                        text: '取消',
+                        onPress: () => {
+
+                        }
+                    },
+                    {
+                        text: '确定',
+                        onPress: () => {
+                            this.confirmGetter({
+                                data: { uid: this.loginInfo.uid, ordernum: ordernum },
+                                success: (data) => {
+                                    this.$router.go(0)
+                                    this.$toast(data)
+                                }
+                            })
+                        }
+                    }
+                ])
+            }, 0)
         },
         goPage(url) {
             this.$parent.goPage(url, this.getIndex(this.$route.query.status))

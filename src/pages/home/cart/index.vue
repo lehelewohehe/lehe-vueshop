@@ -4,79 +4,27 @@
         <div class="cart-main">
             <div class="cart-wrap" ref="cart-wrap">
                 <div class="cart-list">
-                    <div class="cart-item">
-                        <div class="select-btn"></div>
+                    <div class="cart-item" v-for="(item, index) in cartGoods" :key="index">
+                        <div :class="{'select-btn': true, active: item.checked}"></div>
                         <div class="image-wrap">
                             <ul>
-                                <li><img src="http://vueshop.glbuys.com/uploadfiles/1524556213.jpg" alt=""></li>
+                                <li><img :src="item.img" alt=""></li>
                                 <li>删除</li>
                             </ul>
                         </div>
                         <div class="goods-wrap">
                             <div class="goods-info">
-                                <div class="goods-title">老爹鞋女韩版ulzzang原宿百搭网鞋透气网面内增高运动鞋网鞋夏季</div>
+                                <div class="goods-title">{{ item.title }}</div>
                                 <div class="goods-params">
-                                    <div class="goods-color">颜色： 白蓝色</div>
-                                    <div class="goods-size">尺码： 37</div>
+                                    <div class="goods-color" v-for="(subItem, subIndex) in item.attrs" :key="subIndex">{{ subItem.title }}： {{ subItem.param[0].title }}</div>
+                                    <!-- <div class="goods-size">尺码： 37</div> -->
                                 </div>
                             </div>
                             <div class="goods-data">
-                                <div class="goods-price">¥255</div>
+                                <div class="goods-price">¥{{ item.price }}</div>
                                 <div class="num-btn">
                                     <div class="num-sub">-</div>
-                                    <input type="number" class="num-input">
-                                    <div class="num-add">+</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="select-btn"></div>
-                        <div class="image-wrap">
-                            <ul>
-                                <li><img src="http://vueshop.glbuys.com/uploadfiles/1524556213.jpg" alt=""></li>
-                                <li>删除</li>
-                            </ul>
-                        </div>
-                        <div class="goods-wrap">
-                            <div class="goods-info">
-                                <div class="goods-title">老爹鞋女韩版ulzzang原宿百搭网鞋透气网面内增高运动鞋网鞋夏季</div>
-                                <div class="goods-params">
-                                    <div class="goods-color">颜色： 白蓝色</div>
-                                    <div class="goods-size">尺码： 37</div>
-                                </div>
-                            </div>
-                            <div class="goods-data">
-                                <div class="goods-price">¥255</div>
-                                <div class="num-btn">
-                                    <div class="num-sub">-</div>
-                                    <input type="number" class="num-input">
-                                    <div class="num-add">+</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="select-btn"></div>
-                        <div class="image-wrap">
-                            <ul>
-                                <li><img src="http://vueshop.glbuys.com/uploadfiles/1524556213.jpg" alt=""></li>
-                                <li>删除</li>
-                            </ul>
-                        </div>
-                        <div class="goods-wrap">
-                            <div class="goods-info">
-                                <div class="goods-title">老爹鞋女韩版ulzzang原宿百搭网鞋透气网面内增高运动鞋网鞋夏季</div>
-                                <div class="goods-params">
-                                    <div class="goods-color">颜色： 白蓝色</div>
-                                    <div class="goods-size">尺码： 37</div>
-                                </div>
-                            </div>
-                            <div class="goods-data">
-                                <div class="goods-price">¥255</div>
-                                <div class="num-btn">
-                                    <div class="num-sub">-</div>
-                                    <input type="number" class="num-input">
+                                    <input type="number" class="num-input" v-model="item.amount">
                                     <div class="num-add">+</div>
                                 </div>
                             </div>
@@ -100,6 +48,8 @@
 <script type="text/javascript">
 import IScroll from '../../../assets/js/lib/iscroll.js'
 import { addEventListener, removeEventListener } from '../../../assets/js/utils/compatible.js'
+import { mapState, mapActions, mapMutations } from 'vuex'
+
 export default {
     created() {
 
@@ -116,6 +66,11 @@ export default {
     	stopTouchMoveEvent(e) {
             e.preventDefault()
         }
+    },
+    computed: {
+        ...mapState({
+            cartGoods: state => state.cart.cartGoods
+        })
     }
 }
 </script>

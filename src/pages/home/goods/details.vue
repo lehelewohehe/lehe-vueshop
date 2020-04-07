@@ -34,7 +34,7 @@
                 </div>
                 <div class="box-container">
                     <div class="box-header">
-                        <div class="box-image"><img src="http://vueshop.glbuys.com/uploadfiles/1524556409.jpg" alt=""></div>
+                        <div class="box-image"><img :src="goodsDetails.images ? this.goodsDetails.images[0] : ''" alt=""></div>
                         <div class="box-info">
                             <div class="box-title">{{ goodsDetails.title }}</div>
                             <div class="box-sales">
@@ -78,7 +78,7 @@
 <script>
 import IScroll from '../../../assets/js/lib/iscroll.js'
 import { addEventListener, removeEventListener } from '../../../assets/js/utils/compatible.js'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import Vue from 'vue'
 import button from '../../../components/button/index'
 import Toast from '../../../components/toast/'
@@ -90,7 +90,8 @@ export default {
             isBox: false,
             childArr: [true, false, false],
             boxParams: [],
-            goodsNum: 1
+            goodsNum: 1,
+            attrs: []
         }
     },
     created() {
@@ -144,6 +145,9 @@ export default {
             addMyFavorite: 'user/addMyFavorite',
             isSafeLogin: 'user/isSafeLogin'
         }),
+        ...mapMutations({
+            addCartGoods: 'cart/ADD_CARTGOODS'
+        }),
         stopTouchMoveEvent(e) {
             e.preventDefault()
         },
@@ -191,7 +195,47 @@ export default {
                 return
             }
             this.changeBoxStatus(false)
-            this.goodsNum = 0
+            this.attrs = []
+            for (let i = 0; i < this.boxParams.length; i++) {
+                for(let j = 0; j < this.boxParams[i].length; j++) {
+                    if(this.boxParams[i][j]) {
+                        this.attrs.push({
+                            "attrid": this.goodsSpec[i].attrid,
+                            "title": this.goodsSpec[i].title,
+                            "param": [{
+                                "paramid": this.goodsSpec[i].values[j].vid,
+                                "title": this.goodsSpec[i].values[j].value
+                            }]
+                        })
+                    }
+                }
+            }
+            this.addCartGoods({
+                data: {
+                    "gid": this.$route.query.gid,
+                    "title": this.goodsDetails.title,
+                    "amount": this.goodsNum,
+                    "price": this.goodsDetails.price,
+                    "img": this.goodsDetails.images[0],
+                    "checked": true,
+                    "freight": this.goodsDetails.freight,
+                    "attrs": this.attrs
+                }
+            })
+            console.log({
+                data: {
+                    "gid": this.$route.query.gid,
+                    "title": this.goodsDetails.title,
+                    "amount": this.goodsNum,
+                    "price": this.goodsDetails.price,
+                    "img": this.goodsDetails.images[0],
+                    "checked": true,
+                    "freight": this.goodsDetails.freight,
+                    "attrs": this.attrs
+                }
+            })
+            this.$toast('添加成功')
+            this.goodsNum = 1
             for (let i = 0; i < this.boxParams.length; i++) {
                 this.boxParams[i].fill(false)
             }

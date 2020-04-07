@@ -1,5 +1,5 @@
 import * as type from '../mutation-types'
-import { getOrderAllData, getOrderReviewData, getOrderDetailsData, getCommentItemData } from '../../../api/order/'
+import { getOrderAllData, getOrderReviewData, getOrderDetailsData, getCommentItemData, uploadCommentData, cancelOrderData, confirmGetterData } from '../../../api/order/'
 
 export default {
     namespaced: true,
@@ -90,9 +90,9 @@ export default {
         getOrderDetails(context, payload) {
             getOrderDetailsData(payload.data).then(res => {
                 console.log(res)
-                if(res.code === 200) {
-                    context.commit(type.SET_ORDERDETAILS, {orderDetails: res.data})
-                    if(payload.success) {
+                if (res.code === 200) {
+                    context.commit(type.SET_ORDERDETAILS, { orderDetails: res.data })
+                    if (payload.success) {
                         payload.success()
                     }
                 }
@@ -101,8 +101,41 @@ export default {
         getCommentItem(context, payload) {
             getCommentItemData().then(res => {
                 console.log(res)
-                if(res.code === 200) {
-                    context.commit(type.SET_COMMENTITEM, {commentItem: res.data})
+                if (res.code === 200) {
+                    context.commit(type.SET_COMMENTITEM, { commentItem: res.data })
+                    if (payload.success) {
+                        payload.success()
+                    }
+                }
+            })
+        },
+        uploadComment(context, payload) {
+            uploadCommentData(payload.data).then(res => {
+                console.log(res)
+                if (res.code === 200) {
+                    if (payload.success) {
+                        payload.success(res.data)
+                    }
+                } else {
+                    if (payload.error) {
+                        payload.error(res.data)
+                    }
+                }
+            })
+        },
+        cancelOrder(context, payload) {
+            cancelOrderData(payload.data).then(res => {
+                console.log(res)
+                if(payload.success) {
+                    payload.success(res.data)
+                }
+            })
+        },
+        confirmGetter(context, payload) {
+            confirmGetterData(payload.data).then(res => {
+                console.log(res)
+                if(payload.success) {
+                    payload.success(res.data)
                 }
             })
         }
